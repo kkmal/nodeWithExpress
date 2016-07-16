@@ -1,67 +1,40 @@
 const express = require('express');
 const bookRouter = express.Router();
+const mongoconfig = require('../../mongoconfig');
+const mongodb = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectID;
 
-const books = [
-  {
-    title: 'War and Peace',
-    genre: 'Historical Fiction',
-    author: 'Lev Nikolayevich Tolstoy',
-    read: false,
-  },
-  {
-    title: 'Les Misérables',
-    genre: 'Historical Fiction',
-    author: 'Victor Hugo',
-    read: false,
-  },
-  {
-    title: 'The Time Machine',
-    genre: 'Science Fiction',
-    author: 'H. G. Wells',
-    read: false,
-  },
-  {
-    title: 'A Journey into the Center of the Earth',
-    genre: 'Science Fiction',
-    author: 'Jules Verne',
-    read: false,
-  },
-  {
-    title: 'The Dark World',
-    genre: 'Fantasy',
-    author: 'Henry Kuttner',
-    read: false,
-  },
-  {
-    title: 'The Wind in the Willows',
-    genre: 'Fantasy',
-    author: 'Kenneth Grahame',
-    read: false,
-  },
-  {
-    title: 'Life On The Mississippi',
-    genre: 'History',
-    author: 'Mark Twain',
-    read: false,
-  },
-  {
-    title: 'Childhood',
-    genre: 'Biography',
-    author: 'Lev Nikolayevich Tolstoy',
-    read: false,
-  },
-];
+module.exports = (nav) => {
+  bookRouter.route('/')
+    .get((req, res) => {
+      mongodb.connect(mongoconfig.url, (err, db) => {
+        const collection = db.collection('books');
+        collection.find().toArray((err, results) => {
+          res.render('bookList', {
+            title: 'Books',
+            nav,
+            books: results,
+          });
+        });
+      });
+    });
 
-bookRouter.route('/Books')
-  .get((req, res) => res.render('books', { title: 'Books', nav: [{
-    Link: '/Books',
-    Text: 'Books',
-  }, {
-    Link: '/Authors',
-    Text: 'Authors',
-  }], books: books }));
+  bookRouter.route('/:id')
+    .get((req, res) => {
+      const id = new ObjectId(req.params.id);
+      mongodb.connect(mongoconfig.url, (err, db) => {
+        const collection = db.collection('books');
+        collection.findOne({
+          _id: id,
+        }, (err, result) => {
+          res.render('bookView', {
+            title: 'Book',
+            nav,
+            book: result,
+          });
+        });
+      });
+    });
 
-bookRouter.route('/:id')
-  .get((req, res) => res.send('Hello Single Book'));
-
-module.export = bookRouter;
+  return bookRouter;
+};

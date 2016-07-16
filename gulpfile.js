@@ -38,7 +38,7 @@ gulp.task('style', () => gulp.src(files).
   pipe(jscs.reporter())
 );
 
-gulp.task('inject', () => gulp.src('./src/view/index.jade').
+gulp.task('inject', () => gulp.src('./src/view/*.ejs').
     pipe(wiredep(options)).
     pipe(inject(injectSrc, injectOptions)).
     pipe(gulp.dest('./src/view'))
