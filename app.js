@@ -19,6 +19,7 @@ app.get('/', (req, res) => res.render('index',
   { title: 'Hello from Render',
     nav }));
 
+app.set('json spaces', 2);
 app.use(express.static('public'));
 
 app.use(bodyParser.json());

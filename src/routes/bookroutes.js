@@ -1,6 +1,6 @@
 const express = require('express');
 const bookRouter = express.Router();
-const mongoconfig = require('../../mongoconfig');
+const mongoconfig = require('../../src/config/mongoconfig');
 const mongodb = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
 
