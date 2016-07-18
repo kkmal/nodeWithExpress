@@ -3,6 +3,7 @@ const bookRouter = express.Router();
 const mongoconfig = require('../../src/config/mongoconfig');
 const mongodb = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectID;
+const bookService = require('../services/goodreadsService')();
 
 module.exports = (nav) => {
   bookRouter.route('/')
@@ -27,10 +28,13 @@ module.exports = (nav) => {
         collection.findOne({
           _id: id,
         }, (err, result) => {
-          res.render('bookView', {
-            title: 'Book',
-            nav,
-            book: result,
+          bookService.getBookById(result.bookId, (err, book) => {
+            result.book = book;
+            res.render('bookView', {
+              title: 'Book',
+              nav,
+              book: result,
+            });
           });
         });
       });

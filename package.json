@@ -15,10 +15,12 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "express-session": "^1.14.0",
+    "http": "0.0.0",
     "jade": "^1.11.0",
     "mongodb": "^2.2.1",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "xml2js": "^0.4.17"
   },
   "devDependencies": {
     "ejs": "^2.4.2",
